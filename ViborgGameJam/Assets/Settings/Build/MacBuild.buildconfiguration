@@ -1,0 +1,14 @@
+{
+    "Show": true,
+    "Dependencies": [
+        "GlobalObjectId_V1-1-fa814356f660f684fbc8485b2d391824-93214019566545601-0"
+    ],
+    "Components": [
+        {
+            "$type": "Unity.Build.Classic.ClassicBuildProfile, Unity.Build.Classic",
+            "$version": 1,
+            "Platform": "StandaloneOSX",
+            "Configuration": 3
+        }
+    ]
+}
