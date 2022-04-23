@@ -1,4 +1,6 @@
-﻿using Unity.Collections;
+﻿using System;
+using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -7,6 +9,8 @@ using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
+using Random = Unity.Mathematics.Random;
 
 public partial class GameManager : SystemBase {
     private Controller _global;
@@ -22,7 +26,7 @@ public partial class GameManager : SystemBase {
         _global.Enable();
         _global.Player.Start.started += context => {
             if (!HasSingleton<GameStartedTag>())
-                EntityManager.CreateEntity(typeof(GameStartedTag));
+                EntityManager.CreateEntity(typeof(GamePreloadTag));
         };
 
         InputUser.listenForUnpairedDeviceActivity = 4;
@@ -52,15 +56,44 @@ public partial class GameManager : SystemBase {
     protected override void OnUpdate() {}
 }
 
+partial class PreStartSystem : SystemBase {
+    private EntityQuery puppetControllerQuery;
+    protected override void OnCreate() {
+        RequireForUpdate(GetEntityQuery(typeof(GamePreloadTag)));
+    }
+
+    protected override void OnStartRunning() {
+        var rnd = new Random((uint)DateTime.Now.Ticks);
+        var hashSet = new NativeHashSet<int>(4, Allocator.Temp);
+        var playersConnected = puppetControllerQuery.CalculateEntityCount();
+        Entities.WithStoreEntityQueryInField(ref puppetControllerQuery).WithAll<PuppetTag, ControllerReference>().ForEach((Entity e, int entityInQueryIndex) => {
+            var number = rnd.NextInt(playersConnected);
+            while (hashSet.Contains(number)||entityInQueryIndex==number) {
+                number = rnd.NextInt(playersConnected);
+            }
+
+            hashSet.Add(number);
+            EntityManager.AddComponentData(e, new PlayerTargetIndex{Value = number});
+        }).WithStructuralChanges().Run();
+
+        EntityManager.CreateEntity(typeof(GameStartedTag));
+        hashSet.Dispose();
+    }
+
+    protected override void OnUpdate() {}
+}
+
 partial class PlayerSystem : SystemBase {
+    private EntityQuery _playerQuery;
     protected override void OnCreate() {
         RequireForUpdate(GetEntityQuery(typeof(GameStartedTag)));
+        _playerQuery = GetEntityQuery(typeof(PlayerTag));
     }
 
     protected override void OnStartRunning() {
         var playerPrefab = GetSingleton<PlayerPrefabReference>().Value;
         var playerModelPrefab = this.GetSingleton<PlayerModelPrefabReference>().Value;
-        Entities.WithAll<PuppetTag>().ForEach((ControllerReference c) => {
+        Entities.WithAll<PuppetTag>().ForEach((ControllerReference c, in PlayerTargetIndex index) => {
             Debug.Log($"Controller Registered: {c.Value.devices.Value[0].displayName}");
             var player = EntityManager.Instantiate(playerPrefab);
 
@@ -75,6 +108,7 @@ partial class PlayerSystem : SystemBase {
             EntityManager.AddComponentObject(player, instance.GetComponent<Animator>());
             EntityManager.AddComponentObject(player, instance.GetComponent<SpriteRenderer>());
             EntityManager.AddComponentObject(player, c);
+            EntityManager.AddComponentData(player, index);
             var h = GetComponent<HealthCooldown>(player);
             h.TimeLeft = h.Interval;
             EntityManager.SetComponentData(player, h);
@@ -83,6 +117,12 @@ partial class PlayerSystem : SystemBase {
             EntityManager.SetComponentData(player, playerMass);
         }).WithStructuralChanges().Run();
 
+
+        var playerEntities = _playerQuery.ToEntityArray(Allocator.Temp);
+        Entities.WithAll<PlayerTag>().ForEach((Entity e, in PlayerTargetIndex i) => {
+            EntityManager.AddComponentData(e, new TargetEntity { target = playerEntities[i.Value] });
+        }).WithStructuralChanges().Run();
+        
         var playerColors = GetBuffer<ColorElement>(GetSingletonEntity<ColorElement>());
         Entities.WithAll<PlayerTag>().ForEach((int entityInQueryIndex, SpriteRenderer renderer) => {
             renderer.color = playerColors[entityInQueryIndex];
@@ -92,6 +132,8 @@ partial class PlayerSystem : SystemBase {
         Entities.WithAll<PlayerTag>().ForEach((int entityInQueryIndex, ref Translation t) => {
             t.Value = startingPositions[entityInQueryIndex];
         }).WithoutBurst().Run();
+
+        playerEntities.Dispose();
     }
 
     protected override void OnUpdate() {

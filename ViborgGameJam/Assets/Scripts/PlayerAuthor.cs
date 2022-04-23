@@ -10,7 +10,17 @@ public class PlayerAuthor : MonoBehaviour, IConvertGameObjectToEntity {
         dstManager.AddComponentData(entity, new Health { Left = health, Total = health });
         dstManager.AddComponentData(entity, new ShootingCooldown{Interval = ShootingInterval});
         dstManager.AddComponentData(entity, new HealthCooldown{Interval = HealthInterval});
+        dstManager.AddComponentData(entity, new TargetEntity());
+        dstManager.AddComponentData(entity, new PlayerTargetIndex());
     }
+}
+
+public struct PlayerTargetIndex : IComponentData {
+    public int Value;
+}
+
+public struct TargetEntity : IComponentData {
+    public Entity target;
 }
 
 public struct Health : IComponentData {
