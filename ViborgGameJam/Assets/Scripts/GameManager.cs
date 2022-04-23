@@ -75,6 +75,9 @@ partial class PlayerSystem : SystemBase {
             EntityManager.AddComponentObject(player, instance.GetComponent<Animator>());
             EntityManager.AddComponentObject(player, instance.GetComponent<SpriteRenderer>());
             EntityManager.AddComponentObject(player, c);
+            var h = GetComponent<HealthCooldown>(player);
+            h.TimeLeft = h.Interval;
+            EntityManager.SetComponentData(player, h);
             var playerMass = EntityManager.GetComponentData<PhysicsMass>(player);
             playerMass.InverseInertia = 0;
             EntityManager.SetComponentData(player, playerMass);
@@ -106,7 +109,7 @@ partial class PlayerSystem : SystemBase {
         var bulletPrefab = GetSingleton<BulletPrefabReference>().Value;
         var bulletModelPrefab = this.GetSingleton<BulletModelPrefabReference>().Value;
         
-        Entities.WithAll<PlayerTag>().ForEach((Entity e, ControllerReference c, ref Cooldown cooldown, in Translation translation) => {
+        Entities.WithAll<PlayerTag>().ForEach((Entity e, ControllerReference c, ref ShootingCooldown cooldown, in Translation translation) => {
             cooldown.TimeLeft -= deltaTime;
             if (cooldown.TimeLeft > 0) return;
             

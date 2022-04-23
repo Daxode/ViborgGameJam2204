@@ -2,6 +2,7 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using UnityEngine;
@@ -33,10 +34,15 @@ public partial class DamageSystem : SystemBase {
         
         CompleteDependency();
         var healthSprites = EntityManager.GetComponentObject<HealthSprites>(_healthSpritesQuery.GetSingletonEntity()).Values;
-        foreach (var e in entityToDepleteHealth) { 
+        foreach (var e in entityToDepleteHealth) {
+            var timer = GetComponent<HealthCooldown>(e);
+            if (timer.TimeLeft>0) continue;
+            
             var h = GetComponent<Health>(e);
             h.Left--;
             SetComponent(e, h);
+            timer.TimeLeft = timer.Interval;
+            SetComponent(e, timer);
 
             var renderer = EntityManager.GetComponentObject<SpriteRenderer>(e).GetComponent<HealthbarReference>().r;
             renderer.sprite = healthSprites[h.Left];
@@ -45,6 +51,23 @@ public partial class DamageSystem : SystemBase {
                 EntityManager.DestroyEntity(e);
             }
         }
+
+        var deltaTime = Time.DeltaTime;
+        Entities.ForEach((SpriteRenderer r, ref HealthCooldown cooldown) => {
+            cooldown.TimeLeft -= deltaTime;
+            var col = r.color;
+            col.a = math.sin(cooldown.TimeLeft*10) * 0.4f + 0.5f;
+            r.color = col;
+            var renderer = r.GetComponent<HealthbarReference>().r;
+            var c = renderer.color;
+            c.a = math.sin(cooldown.TimeLeft*10+5) * 0.4f + 0.5f;
+            renderer.color = c;
+            if (cooldown.TimeLeft > 0) return;
+            col.a = 1;
+            r.color = col;
+            
+            renderer.sprite = null;
+        }).WithoutBurst().Run();
 
         entityToDepleteHealth.Dispose();
     }
