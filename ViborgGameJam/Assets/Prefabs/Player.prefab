@@ -241,6 +241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dc4fb6251ec4fac8465b61d76b794b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 3
+  ShootingInterval: 0.4
 --- !u!114 &9074442200044856661
 MonoBehaviour:
   m_ObjectHideFlags: 0

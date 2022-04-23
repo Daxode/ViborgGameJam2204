@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using System.Collections.Generic;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
@@ -15,42 +16,52 @@ public partial class DamageSystem : SystemBase {
     }
 
     protected override void OnUpdate() {
+        var entityToDepleteHealth = new NativeHashSet<Entity>(4, Allocator.TempJob);
         var job = new BulletTriggerJob {
             bullets = GetComponentDataFromEntity<BulletDamage>(true),
             bulletOrigin = GetComponentDataFromEntity<BulletOrigin>(true),
-            healths = GetComponentDataFromEntity<Health>(),
-            ecb = _entityCommandBufferSystem.CreateCommandBuffer()
+            healths = GetComponentDataFromEntity<Health>(true),
+            ecb = _entityCommandBufferSystem.CreateCommandBuffer(),
+            entityToDepleteHealth = entityToDepleteHealth
         };
         Dependency = job.Schedule(physicsWorld.Simulation, Dependency);
         _entityCommandBufferSystem.AddJobHandleForProducer(Dependency);
+        
+        CompleteDependency();
+        foreach (var e in entityToDepleteHealth) { 
+            var h = GetComponent<Health>(e);
+            h.Left--;
+            SetComponent(e, h);
+            if (h.Left <= 0) {
+                EntityManager.DestroyEntity(e);
+            }
+        }
+
+        entityToDepleteHealth.Dispose();
     }
 }
 
-//[BurstCompile]
+[BurstCompile]
 public struct BulletTriggerJob : ITriggerEventsJob {
     [ReadOnly] public ComponentDataFromEntity<BulletDamage> bullets;
     [ReadOnly] public ComponentDataFromEntity<BulletOrigin> bulletOrigin;
-    
-    public ComponentDataFromEntity<Health> healths;
+    [ReadOnly] public ComponentDataFromEntity<Health> healths;
     public EntityCommandBuffer ecb;
+    public NativeHashSet<Entity> entityToDepleteHealth;
 
     public void Execute(TriggerEvent triggerEvent) {
-        var bulletEntity = triggerEvent.EntityA;
-        var healthEntity = triggerEvent.EntityB;
+        BulletVHealth(triggerEvent.EntityA, triggerEvent.EntityB);
+        BulletVHealth(triggerEvent.EntityB, triggerEvent.EntityA);
+    }
 
+    private void BulletVHealth(Entity bulletEntity, Entity healthEntity) {
         if (!bullets.HasComponent(bulletEntity)) return;
         if (bulletOrigin[bulletEntity].Value == healthEntity || bullets.HasComponent(healthEntity)) return;
-        
+
         if (healths.HasComponent(healthEntity)) {
-            var health = healths[healthEntity];
-            health.Left--;
-            Debug.Log(health.Left);
-            healths[healthEntity] = health;
-            if (health.Left < 0) {
-                ecb.DestroyEntity(healthEntity);
-            }
+            entityToDepleteHealth.Add(healthEntity);
         }
-            
+
         ecb.DestroyEntity(bulletEntity);
     }
 }

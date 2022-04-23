@@ -78,6 +78,11 @@ partial class PlayerSystem : SystemBase {
         Entities.WithAll<PlayerTag>().ForEach((int entityInQueryIndex, SpriteRenderer renderer) => {
             renderer.color = playerColors[entityInQueryIndex];
         }).WithoutBurst().Run();
+        
+        var startingPositions = GetBuffer<StartingPositionElement>(GetSingletonEntity<StartingPositionElement>());
+        Entities.WithAll<PlayerTag>().ForEach((int entityInQueryIndex, ref Translation t) => {
+            t.Value = startingPositions[entityInQueryIndex];
+        }).WithoutBurst().Run();
     }
 
     protected override void OnUpdate() {
@@ -96,24 +101,25 @@ partial class PlayerSystem : SystemBase {
         var bulletModelPrefab = this.GetSingleton<BulletModelPrefabReference>().Value;
         
         Entities.WithAll<PlayerTag>().ForEach((Entity e, ControllerReference c, ref Cooldown cooldown, in Translation translation) => {
+            cooldown.TimeLeft -= deltaTime;
+            if (cooldown.TimeLeft > 0) return;
+            
             float2 direction = c.Value.Player.ShootingDirection.ReadValue<Vector2>();
-            cooldown.TimeLeft += deltaTime;
-            if(math.any(math.abs(direction) > 0.1f) && cooldown.TimeLeft > 0.8f)  // <- CHANGE THAT VAKUE FOR SHOOTING SPEED
-            {
-                cooldown.TimeLeft = 0;
-                var bullet = EntityManager.Instantiate(bulletPrefab);
-                var bulletModel = EntityManager.GetComponentData<ModelReference>(bullet).Value;                
-                var instance = Object.Instantiate(bulletModelPrefab);
+            if (!math.any(math.abs(direction) > 0.1f)) return;
+
+            cooldown.TimeLeft = cooldown.Interval;
+            var bullet = EntityManager.Instantiate(bulletPrefab);
+            var bulletModel = EntityManager.GetComponentData<ModelReference>(bullet).Value;                
+            var instance = Object.Instantiate(bulletModelPrefab);
                 
-                EntityManager.SetName(bullet, "Bullet");
-                EntityManager.SetComponentData(bullet, translation);
-                EntityManager.SetComponentData(bullet, new PhysicsVelocity{Linear = new float3(direction,0)*10});
-                EntityManager.AddComponentData(bullet, new BulletOrigin { Value = e });
+            EntityManager.SetName(bullet, "Bullet");
+            EntityManager.SetComponentData(bullet, translation);
+            EntityManager.SetComponentData(bullet, new PhysicsVelocity{Linear = new float3(direction,0)*10});
+            EntityManager.AddComponentData(bullet, new BulletOrigin { Value = e });
                     
-                EntityManager.SetName(bulletModel, "BulletModel");
-                EntityManager.AddComponentData(bulletModel,  new GameObjectStateComponent{GameObject = instance.transform.gameObject});
-                EntityManager.AddComponentObject(bulletModel, instance.transform);
-            }
+            EntityManager.SetName(bulletModel, "BulletModel");
+            EntityManager.AddComponentData(bulletModel,  new GameObjectStateComponent{GameObject = instance.transform.gameObject});
+            EntityManager.AddComponentObject(bulletModel, instance.transform);
         }).WithStructuralChanges().Run();
     }
 }
