@@ -46,11 +46,16 @@ partial class PlayerSystem : SystemBase {
         Entities.WithAll<PuppetTag>().ForEach((ControllerReference c) => {
             Debug.Log($"Controller Registered: {c.Value.devices.Value[0].displayName}");
             var player = EntityManager.Instantiate(playerPrefab);
-            EntityManager.AddComponentObject(player, c);
+
+            // Setup player model
+            var playerModel = EntityManager.GetComponentData<PlayerModelReference>(player).Value;
             var instance = Object.Instantiate(playerModelPrefab.gameObject);
-            EntityManager.AddComponentObject(player, instance.transform);
+            EntityManager.AddComponentObject(playerModel, instance.transform);
+            EntityManager.AddComponentData(playerModel, new CopyTransformToGameObject());
+
+            // Setup Player
             EntityManager.AddComponentObject(player, instance.GetComponent<Animator>());
-            EntityManager.AddComponentData(player, new CopyTransformToGameObject());
+            EntityManager.AddComponentObject(player, c);
             var playerMass = EntityManager.GetComponentData<PhysicsMass>(player);
             playerMass.InverseInertia = 0;
             EntityManager.SetComponentData(player, playerMass);
