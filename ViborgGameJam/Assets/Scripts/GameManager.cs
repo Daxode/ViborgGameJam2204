@@ -47,7 +47,6 @@ public partial class GameManager : SystemBase {
 }
 
 partial class PlayerSystem : SystemBase {
-    float cooldown = 0;
     protected override void OnCreate() {
         RequireForUpdate(GetEntityQuery(typeof(GameStartedTag)));
     }
@@ -95,12 +94,12 @@ partial class PlayerSystem : SystemBase {
         var bulletPrefab = GetSingleton<BulletPrefabReference>().Value;
         var bulletModelPrefab = this.GetSingleton<BulletModelPrefabReference>().Value;
         
-        Entities.WithAll<PlayerTag>().ForEach((ControllerReference c, in Translation translation) => {
+        Entities.WithAll<PlayerTag>().ForEach((ControllerReference c, ref Cooldown cooldown, in Translation translation) => {
             float2 direction = c.Value.Player.ShootingDirection.ReadValue<Vector2>();
-            cooldown += deltaTime;
-            if(math.any(math.abs(direction) > 0.1f) && cooldown > 0.8f)  // <- CHANGE THAT VAKUE FOR SHOOTING SPEED
+            cooldown.TimeLeft += deltaTime;
+            if(math.any(math.abs(direction) > 0.1f) && cooldown.TimeLeft > 0.8f)  // <- CHANGE THAT VAKUE FOR SHOOTING SPEED
             {
-                cooldown = 0;
+                cooldown.TimeLeft = 0;
                 var bullet = EntityManager.Instantiate(bulletPrefab);
                 var bulletModel = EntityManager.GetComponentData<ModelReference>(bullet).Value;                
                 var instance = Object.Instantiate(bulletModelPrefab);
