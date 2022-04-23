@@ -95,7 +95,7 @@ BlendTree:
     m_DirectBlendParameter: BlendX
     m_Mirror: 0
   m_BlendParameter: BlendX
-  m_BlendParameterY: BlendX
+  m_BlendParameterY: BlendY
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
