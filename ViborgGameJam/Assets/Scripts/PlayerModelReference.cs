@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
 [GenerateAuthoringComponent]
-public struct PlayerModelReference : IComponentData {
+public struct ModelReference : IComponentData {
     public Entity Value;
 }

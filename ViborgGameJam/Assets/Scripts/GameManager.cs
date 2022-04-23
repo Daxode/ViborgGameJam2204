@@ -53,7 +53,7 @@ partial class PlayerSystem : SystemBase {
             var player = EntityManager.Instantiate(playerPrefab);
 
             // Setup player model
-            var playerModel = EntityManager.GetComponentData<PlayerModelReference>(player).Value;
+            var playerModel = EntityManager.GetComponentData<ModelReference>(player).Value;
             var instance = Object.Instantiate(playerModelPrefab.gameObject);
             EntityManager.AddComponentObject(playerModel, instance.transform);
             EntityManager.AddComponentData(playerModel, new CopyTransformToGameObject());
@@ -67,6 +67,9 @@ partial class PlayerSystem : SystemBase {
 
             SpriteRenderer playerSpriteRenderer = instance.GetComponent<SpriteRenderer>();
             playerSpriteRenderer.color = playerColors[entityInQueryIndex];
+
+            
+
         }).WithStructuralChanges().Run();
     }
 
@@ -81,6 +84,20 @@ partial class PlayerSystem : SystemBase {
             var playerActions = c.Value.Player;
             a.SetBool("Walking", playerActions.Movement.IsPressed());
         }).WithoutBurst().Run();
+
+        var bulletPrefab = GetSingleton<BulletPrefabReference>().Value;
+        var bulletModelPrefab = this.GetSingleton<BulletModelPrefabReference>().Value;
+        Entities.WithAll<PlayerTag>().ForEach((ControllerReference c) => {
+            if(c.Value.Player.Fire.WasPressedThisFrame())
+            {
+                var bullet = EntityManager.Instantiate(bulletPrefab);
+                var bulletModel = EntityManager.GetComponentData<ModelReference>(bullet).Value;                
+                var instance = Object.Instantiate(bulletModelPrefab);
+                var direction = c.Value.Player.ShootingDirection.ReadValue<Vector2>();
+                EntityManager.SetComponentData(bullet, new PhysicsVelocity{Linear = new float3(direction,0)*10});
+                EntityManager.AddComponentObject(bulletModel, instance.transform);
+            }
+        }).WithStructuralChanges().Run();
     }
 }
 
