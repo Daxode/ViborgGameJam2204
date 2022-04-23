@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: back_atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 8ccca7e4564709041b0171f4c03a58e0, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 98242dc1aa83e264489470d338fa4d4e, type: 3}
+  - {fileID: 21300000, guid: 939b36b2d2fa5e644bcbf1b316cb44dc, type: 3}
+  - {fileID: 21300000, guid: 266707b2b40fc644a8dd81bd0e9489db, type: 3}
+  - {fileID: 21300000, guid: c3ee94b340c85904395da7466a815262, type: 3}
+  - {fileID: 21300000, guid: e47362258fb350f4daf8b738e2141745, type: 3}
+  - {fileID: 21300000, guid: 76498396ed940ef4d8282a7421fa5e55, type: 3}
+  - {fileID: 21300000, guid: 8f283f673bd27bb42ad4c059b0bc796d, type: 3}
+  - {fileID: 21300000, guid: 947a3af7fc0afe148b7efaa9def2176c, type: 3}
+  - {fileID: 21300000, guid: 0910410904c375d43808e5cbb630f3b0, type: 3}
+  - {fileID: 21300000, guid: f234b319624174f44954867d6b00c83a, type: 3}
+  - {fileID: 21300000, guid: bd1d6aba96207bc4f911f81bb8048379, type: 3}
+  - {fileID: 21300000, guid: 65dea9ab616f19f48acf25984d0707f3, type: 3}
+  - {fileID: 21300000, guid: c84c799cef7834846aba31356500791e, type: 3}
+  - {fileID: 21300000, guid: 9a6ef6fcfa53894459bd922cfd67995e, type: 3}
+  - {fileID: 21300000, guid: c785d20dc20611643a4c21f7f5f3e6e9, type: 3}
+  - {fileID: 21300000, guid: c570555d536d9244db30483df5f0eb7f, type: 3}
+  - {fileID: 21300000, guid: 4e73fc5d448d63e47a69205f032d0d32, type: 3}
+  - {fileID: 21300000, guid: 6d01b19e48f92a442832e76e4bd96d44, type: 3}
+  - {fileID: 21300000, guid: 791368ae4384ce6498ab6f8e6303f4d0, type: 3}
+  - {fileID: 21300000, guid: 999bb5ee47bb70c4c8898931b98337d9, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - run_8th_angle_back0012
+  - run_8th_angle_back0003
+  - run_8th_angle_back0010
+  - run_8th_angle_back0008
+  - run_8th_angle_back0013
+  - run_8th_angle_back0014
+  - run_8th_angle_back0001
+  - run_8th_angle_back0015
+  - run_8th_angle_back0016
+  - run_8th_angle_back0011
+  - run_8th_angle_back0007
+  - run_8th_angle_back0000
+  - run_8th_angle_back0004
+  - run_8th_angle_back0019
+  - run_8th_angle_back0009
+  - run_8th_angle_back0002
+  - run_8th_angle_back0005
+  - run_8th_angle_back0017
+  - run_8th_angle_back0006
+  - run_8th_angle_back0018
+  m_RenderDataMap: {}
+  m_Tag: back_atlas
+  m_IsVariant: 0

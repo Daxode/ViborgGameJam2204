@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: idle_atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 6f4d64d69b5c51845a76d7d7ad1e180b, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 5d4cd61224f17bc4b8bb94789a1a8994, type: 3}
+  - {fileID: 21300000, guid: 266a2562f0c9cc34189e93177abc9804, type: 3}
+  - {fileID: 21300000, guid: 56b3dc822215ffc49a8291d0c2bebd76, type: 3}
+  - {fileID: 21300000, guid: 5bad89c4786875148880e3ebddf136e2, type: 3}
+  - {fileID: 21300000, guid: 8ec1e98a862474a4d80afd13b4fe19cb, type: 3}
+  - {fileID: 21300000, guid: be7f49bbf21afc14ea6fb1bcea408407, type: 3}
+  - {fileID: 21300000, guid: aa21167c9cf4dc34688a5e311a2b585d, type: 3}
+  - {fileID: 21300000, guid: 992e63ddd59dc08458555a71e25e7536, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - idle_animation0007
+  - idle_animation0002
+  - idle_animation0000
+  - idle_animation0004
+  - idle_animation0003
+  - idle_animation0006
+  - idle_animation0005
+  - idle_animation0001
+  m_RenderDataMap: {}
+  m_Tag: idle_atlas
+  m_IsVariant: 0

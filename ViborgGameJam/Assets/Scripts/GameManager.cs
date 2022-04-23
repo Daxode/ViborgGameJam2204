@@ -104,6 +104,9 @@ partial class PlayerSystem : SystemBase {
         Entities.WithAll<PlayerTag>().ForEach((Animator a, ControllerReference c) => {
             var playerActions = c.Value.Player;
             a.SetBool("Walking", playerActions.Movement.IsPressed());
+            var mov = playerActions.Movement.ReadValue<Vector2>();
+            a.SetFloat("BlendX", mov.x);
+            a.SetFloat("BlendY", mov.y);
         }).WithoutBurst().Run();
 
         var bulletPrefab = GetSingleton<BulletPrefabReference>().Value;
