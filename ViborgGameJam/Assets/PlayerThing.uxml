@@ -1,8 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="Background" style="width: 128px; height: 128px; border-left-width: 6px; border-right-width: 6px; border-top-width: 6px; border-bottom-width: 6px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-left-color: rgba(255, 255, 255, 255); border-right-color: rgba(255, 255, 255, 255); border-top-color: rgba(255, 255, 255, 255); border-bottom-color: rgba(255, 255, 255, 255); background-color: rgba(200, 48, 170, 255); flex-direction: row;">
-        <ui:VisualElement style="background-image: url(&apos;/Assets/2D/Logo.png&apos;); flex-grow: 1; border-top-left-radius: 44px; border-bottom-left-radius: 44px; border-top-right-radius: 44px; border-bottom-right-radius: 44px;" />
-        <ui:VisualElement style="position: absolute; left: 0; right: 0; bottom: 0; align-items: center; font-size: 50px; margin-bottom: 2px;">
-            <ui:Label text="Label" display-tooltip-when-elided="true" style="position: relative; font-size: 12px;" />
+    <ui:VisualElement style="flex-direction: row; height: 55px;">
+        <ui:VisualElement style="background-color: rgba(0, 0, 0, 0.38); border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-left-color: rgba(19, 19, 19, 0.25); border-right-color: rgba(19, 19, 19, 0.25); border-top-color: rgba(19, 19, 19, 0.25); border-bottom-color: rgba(19, 19, 19, 0.25); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; align-items: center; flex-grow: 1; justify-content: center;">
+            <ui:VisualElement name="Hat" style="background-image: url(&apos;/Assets/2D/HAT.png&apos;); width: 50px; height: 50px; -unity-background-image-tint-color: rgb(241, 133, 133);" />
+        </ui:VisualElement>
+        <ui:VisualElement style="background-color: rgba(0, 0, 0, 0.38); border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-left-color: rgba(19, 19, 19, 0.25); border-right-color: rgba(19, 19, 19, 0.25); border-top-color: rgba(19, 19, 19, 0.25); border-bottom-color: rgba(19, 19, 19, 0.25); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; align-items: center; flex-grow: 1; justify-content: center;">
+            <ui:VisualElement name="Skull" style="background-image: url(&apos;/Assets/2D/SKULL.png&apos;); width: 50px; height: 50px; -unity-background-image-tint-color: rgb(209, 119, 90);" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

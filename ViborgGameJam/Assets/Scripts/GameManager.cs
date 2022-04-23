@@ -40,14 +40,15 @@ public partial class GameManager : SystemBase {
             
             var e = EntityManager.CreateEntity(typeof(PuppetTag));
             EntityManager.AddComponentObject(e, new ControllerReference{Value = playerController});
-
-            var uiDocumentEntity = GetSingletonEntity<UIDocument>();
-            var root = EntityManager.GetComponentObject<UIDocument>(uiDocumentEntity).rootVisualElement;
+            
+            var root = EntityManager.GetComponentObject<UIDocument>(GetSingletonEntity<UIDocument>()).rootVisualElement;
             var playerColors = GetBuffer<ColorElement>(colorQuery.GetSingletonEntity());
             var playerThingAsset = EntityManager.GetComponentObject<PlayerThingUXMLReference>(GetSingletonEntity<PlayerThingUXMLReference>()).Value;
             var playerThing = playerThingAsset.Instantiate();
-            playerThing.Q("Background").style.backgroundColor = playerColors[4-InputUser.listenForUnpairedDeviceActivity].Color;
+            playerThing.Q("Hat").style.unityBackgroundImageTintColor = playerColors[4-InputUser.listenForUnpairedDeviceActivity].Color;
             root.Q("Players").Add(playerThing);
+            EntityManager.AddComponentObject(e, new PlayerThingReference{Element = playerThing});
+
             
             InputUser.listenForUnpairedDeviceActivity--;
         };
@@ -56,17 +57,23 @@ public partial class GameManager : SystemBase {
     protected override void OnUpdate() {}
 }
 
+public class PlayerThingReference : IComponentData {
+    public VisualElement Element;
+}
+
 partial class PreStartSystem : SystemBase {
     private EntityQuery puppetControllerQuery;
+    private EntityQuery colorQuery;
     protected override void OnCreate() {
         RequireForUpdate(GetEntityQuery(typeof(GamePreloadTag)));
+        colorQuery = GetEntityQuery(typeof(ColorElement));
     }
 
     protected override void OnStartRunning() {
         var rnd = new Random((uint)DateTime.Now.Ticks);
         var hashSet = new NativeHashSet<int>(4, Allocator.Temp);
         var playersConnected = puppetControllerQuery.CalculateEntityCount();
-        Entities.WithStoreEntityQueryInField(ref puppetControllerQuery).WithAll<PuppetTag, ControllerReference>().ForEach((Entity e, int entityInQueryIndex) => {
+        Entities.WithStoreEntityQueryInField(ref puppetControllerQuery).WithAll<PuppetTag, ControllerReference>().ForEach((Entity e, int entityInQueryIndex, PlayerThingReference playerThing) => {
             var number = rnd.NextInt(playersConnected);
             while (hashSet.Contains(number)||entityInQueryIndex==number) {
                 number = rnd.NextInt(playersConnected);
@@ -74,6 +81,9 @@ partial class PreStartSystem : SystemBase {
 
             hashSet.Add(number);
             EntityManager.AddComponentData(e, new PlayerTargetIndex{Value = number});
+            
+            var playerColors = GetBuffer<ColorElement>(colorQuery.GetSingletonEntity());
+            playerThing.Element.Q("Skull").style.unityBackgroundImageTintColor = playerColors[number].Color;
         }).WithStructuralChanges().Run();
 
         EntityManager.CreateEntity(typeof(GameStartedTag));
