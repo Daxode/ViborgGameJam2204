@@ -11,7 +11,14 @@ using UnityEngine.UIElements;
 [AlwaysUpdateSystem]
 public partial class GameManager : SystemBase {
     private Controller _global;
+
+    private EntityQuery colorQuery;
     protected override void OnCreate() {
+        colorQuery = GetEntityQuery(typeof(ColorElement));
+        RequireForUpdate(colorQuery);
+    }
+
+    protected override void OnStartRunning() {
         _global = new Controller();
         _global.Enable();
         _global.Player.Start.started += context => {
@@ -33,7 +40,7 @@ public partial class GameManager : SystemBase {
 
             var uiDocumentEntity = GetSingletonEntity<UIDocument>();
             var root = EntityManager.GetComponentObject<UIDocument>(uiDocumentEntity).rootVisualElement;
-            var playerColors = GetBuffer<ColorElement>(GetSingletonEntity<ColorElement>());
+            var playerColors = GetBuffer<ColorElement>(colorQuery.GetSingletonEntity());
             var playerThingAsset = EntityManager.GetComponentObject<PlayerThingUXMLReference>(GetSingletonEntity<PlayerThingUXMLReference>()).Value;
             var playerThing = playerThingAsset.Instantiate();
             playerThing.Q("Background").style.backgroundColor = playerColors[4-InputUser.listenForUnpairedDeviceActivity].Color;

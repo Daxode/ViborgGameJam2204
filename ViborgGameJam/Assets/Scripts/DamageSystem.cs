@@ -33,7 +33,7 @@ public partial class DamageSystem : SystemBase {
             h.Left--;
             SetComponent(e, h);
             if (h.Left <= 0) {
-                EntityManager.DestroyEntity(e);
+                EntityManager.DestroyEntity(e); 
             }
         }
 
