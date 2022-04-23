@@ -10,9 +10,13 @@ using UnityEngine;
 public partial class DamageSystem : SystemBase {
     private StepPhysicsWorld physicsWorld;
     private EndFixedStepSimulationEntityCommandBufferSystem _entityCommandBufferSystem;
+    private EntityQuery _healthSpritesQuery;
+
     protected override void OnCreate() {
         physicsWorld = World.GetExistingSystem<StepPhysicsWorld>();
         _entityCommandBufferSystem = World.GetExistingSystem<EndFixedStepSimulationEntityCommandBufferSystem>();
+        _healthSpritesQuery = GetEntityQuery(typeof(HealthSprites));
+        RequireForUpdate(_healthSpritesQuery);
     }
 
     protected override void OnUpdate() {
@@ -28,12 +32,17 @@ public partial class DamageSystem : SystemBase {
         _entityCommandBufferSystem.AddJobHandleForProducer(Dependency);
         
         CompleteDependency();
+        var healthSprites = EntityManager.GetComponentObject<HealthSprites>(_healthSpritesQuery.GetSingletonEntity()).Values;
         foreach (var e in entityToDepleteHealth) { 
             var h = GetComponent<Health>(e);
             h.Left--;
             SetComponent(e, h);
+
+            var renderer = EntityManager.GetComponentObject<SpriteRenderer>(e).GetComponent<HealthbarReference>().r;
+            renderer.sprite = healthSprites[h.Left];
+
             if (h.Left <= 0) {
-                EntityManager.DestroyEntity(e); 
+                EntityManager.DestroyEntity(e);
             }
         }
 
