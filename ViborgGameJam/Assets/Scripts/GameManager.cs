@@ -70,10 +70,11 @@ partial class PreStartSystem : SystemBase {
     }
 
     protected override void OnStartRunning() {
-        var rnd = new Random((uint)DateTime.Now.Ticks);
+        var timeTicks = (uint)DateTime.Now.Ticks;
         var hashSet = new NativeHashSet<int>(4, Allocator.Temp);
         var playersConnected = puppetControllerQuery.CalculateEntityCount();
         Entities.WithStoreEntityQueryInField(ref puppetControllerQuery).WithAll<PuppetTag, ControllerReference>().ForEach((Entity e, int entityInQueryIndex, PlayerThingReference playerThing) => {
+            var rnd = Random.CreateFromIndex((uint)entityInQueryIndex + timeTicks);
             var number = rnd.NextInt(playersConnected);
             while (hashSet.Contains(number)||entityInQueryIndex==number) {
                 number = rnd.NextInt(playersConnected);
