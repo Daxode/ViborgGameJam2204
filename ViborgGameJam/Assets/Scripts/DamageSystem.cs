@@ -17,6 +17,7 @@ public partial class DamageSystem : SystemBase {
     protected override void OnUpdate() {
         var job = new BulletTriggerJob {
             bullets = GetComponentDataFromEntity<BulletDamage>(true),
+            bulletOrigin = GetComponentDataFromEntity<BulletOrigin>(true),
             healths = GetComponentDataFromEntity<Health>(),
             ecb = _entityCommandBufferSystem.CreateCommandBuffer()
         };
@@ -28,18 +29,23 @@ public partial class DamageSystem : SystemBase {
 //[BurstCompile]
 public struct BulletTriggerJob : ITriggerEventsJob {
     [ReadOnly] public ComponentDataFromEntity<BulletDamage> bullets;
+    [ReadOnly] public ComponentDataFromEntity<BulletOrigin> bulletOrigin;
+    
     public ComponentDataFromEntity<Health> healths;
     public EntityCommandBuffer ecb;
 
     public void Execute(TriggerEvent triggerEvent) {
-        var bulletEntity = triggerEvent.EntityB;
-        var healthEntity = triggerEvent.EntityA;
+        var bulletEntity = triggerEvent.EntityA;
+        var healthEntity = triggerEvent.EntityB;
 
         if (!bullets.HasComponent(bulletEntity)) return;
+        if (bulletOrigin[bulletEntity].Value == healthEntity || bullets.HasComponent(healthEntity)) return;
         
         if (healths.HasComponent(healthEntity)) {
             var health = healths[healthEntity];
             health.Left--;
+            Debug.Log(health.Left);
+            healths[healthEntity] = health;
             if (health.Left < 0) {
                 ecb.DestroyEntity(healthEntity);
             }
