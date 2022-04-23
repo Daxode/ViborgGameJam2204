@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: runside_atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: dd77057f76d88934f97b14f7242249f2, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: df3b1fd0a8f0b024687e33b2af322a6c, type: 3}
+  - {fileID: 21300000, guid: 12f8601124ee98e48a2c525aa69da0a0, type: 3}
+  - {fileID: 21300000, guid: 1adcd04177ff66c458701d6381c91381, type: 3}
+  - {fileID: 21300000, guid: d453cd71941f15e49bfeae210e77f12d, type: 3}
+  - {fileID: 21300000, guid: 1cd12e912280e204e9907d1fbbf311fc, type: 3}
+  - {fileID: 21300000, guid: 71f914b28557bfa418fd04f6e0d55beb, type: 3}
+  - {fileID: 21300000, guid: e390fca47543acd499de3f5157025fb3, type: 3}
+  - {fileID: 21300000, guid: 9756ef86bcf4a8142accfbf4a94fdc06, type: 3}
+  - {fileID: 21300000, guid: 3c76bab7cc984a546ad72b0fd705780a, type: 3}
+  - {fileID: 21300000, guid: 4bfe8739d2adab74092a199eadc5430f, type: 3}
+  - {fileID: 21300000, guid: 25bae6e9f0578284581fdca019b2d26b, type: 3}
+  - {fileID: 21300000, guid: 087aa5cac99d9bc43ac7db78ca186683, type: 3}
+  - {fileID: 21300000, guid: 3b8092da733d2324881d8b94f2752d0f, type: 3}
+  - {fileID: 21300000, guid: 1a4a775c4bf018b488426c0b941cf16a, type: 3}
+  - {fileID: 21300000, guid: d08a3f8c1962317418d5532d454bd519, type: 3}
+  - {fileID: 21300000, guid: 1ccf71ac8b4400c48a6ad5ed0b025740, type: 3}
+  - {fileID: 21300000, guid: 98c102ec44303bf4c88f908de87c73a7, type: 3}
+  - {fileID: 21300000, guid: 48c479bda5d298d49b6c4973c57b5051, type: 3}
+  - {fileID: 21300000, guid: ab93826e4a1e71a4294d9cd1869d04b0, type: 3}
+  - {fileID: 21300000, guid: d0fe577f53fdc2d4d8b5d7a9cd81f76b, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - run_side0014
+  - run_side0003
+  - run_side0016
+  - run_side0011
+  - run_side0018
+  - run_side0004
+  - run_side0001
+  - run_side0015
+  - run_side0017
+  - run_side0008
+  - run_side0010
+  - run_side0000
+  - run_side0005
+  - run_side0009
+  - run_side0012
+  - run_side0002
+  - run_side0019
+  - run_side0013
+  - run_side0006
+  - run_side0007
+  m_RenderDataMap: {}
+  m_Tag: runside_atlas
+  m_IsVariant: 0
