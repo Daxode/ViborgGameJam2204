@@ -43,7 +43,12 @@ partial class PlayerSystem : SystemBase {
     protected override void OnStartRunning() {
         var playerPrefab = GetSingleton<PlayerPrefabReference>().Value;
         var playerModelPrefab = this.GetSingleton<PlayerModelPrefabReference>().Value;
-        Entities.WithAll<PuppetTag>().ForEach((ControllerReference c) => {
+        Color[] playerColors = new Color[4]; //defining our 4 player colors
+            playerColors[0] = new Color(1,0,0,1);
+            playerColors[1] = new Color(0,1,0,1);
+            playerColors[2] = new Color(0,0,1,1);
+            playerColors[3] = new Color(1,1,0,1);
+        Entities.WithAll<PuppetTag>().ForEach((int entityInQueryIndex, ControllerReference c) => {
             Debug.Log($"Controller Registered: {c.Value.devices.Value[0].displayName}");
             var player = EntityManager.Instantiate(playerPrefab);
             EntityManager.AddComponentObject(player, c);
@@ -54,6 +59,9 @@ partial class PlayerSystem : SystemBase {
             var playerMass = EntityManager.GetComponentData<PhysicsMass>(player);
             playerMass.InverseInertia = 0;
             EntityManager.SetComponentData(player, playerMass);
+
+            SpriteRenderer playerSpriteRenderer = instance.GetComponent<SpriteRenderer>();
+            playerSpriteRenderer.color = playerColors[entityInQueryIndex];
         }).WithStructuralChanges().Run();
     }
 
