@@ -35,12 +35,39 @@ public partial class @Controller : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Start"",
+                    ""type"": ""Button"",
+                    ""id"": ""6672d8bf-a7f0-4175-b0fd-9a9a2017bb01"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""c5b6b7f2-f49a-42e4-9872-5373cb376a6c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShootingDirection"",
+                    ""type"": ""Value"",
+                    ""id"": ""a01f239f-3a78-4056-be0b-82badccdcad1"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""78564843-7698-4b40-aef6-fa8e47f313a0"",
+                    ""id"": ""c4c75654-2dbe-4e34-ab60-24ddf67c3f0a"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -51,14 +78,124 @@ public partial class @Controller : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""17d824d7-4865-4ca9-97a5-d3b5beb5aff6"",
+                    ""id"": ""417fae91-c498-4e54-8e5a-c3f70b347080"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Main"",
+                    ""action"": ""Start"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d2bc21c8-75a3-4eca-92bf-90de5239942a"",
+                    ""path"": ""<HID::Nintendo Wireless Gamepad>/button10"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Main"",
+                    ""action"": ""Start"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d9e26c8-ee9c-4b1b-990d-d56d56fc09f0"",
+                    ""path"": ""<HID::Nintendo Wireless Gamepad>/button6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Main"",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b64c615-1d88-4ad9-8a2c-fb12ef9c2501"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Main"",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c7765b9-dbae-4b4a-a9c5-84b687ab32d7"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Main"",
+                    ""action"": ""ShootingDirection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b0410ae9-ce3e-48a0-8485-143a06c26e3e"",
                     ""path"": ""<HID::Nintendo Wireless Gamepad>/hat"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Main"",
-                    ""action"": ""Movement"",
+                    ""action"": ""ShootingDirection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""DPad"",
+                    ""id"": ""a4b1ae91-f068-4da2-af1d-8dc07d6cc3f0"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""739f53a4-13a5-4b36-8c7b-077abd34247a"",
+                    ""path"": ""<HID::Nintendo Wireless Gamepad>/button4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""0fff0352-82b1-43a7-8f24-b3b263c3a000"",
+                    ""path"": ""<HID::Nintendo Wireless Gamepad>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""bf6b0a84-3d27-4768-a425-42bcfbeb78c3"",
+                    ""path"": ""<HID::Nintendo Wireless Gamepad>/button3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""9fa81d1f-2dd3-409d-9f06-fe2388d1b1fd"",
+                    ""path"": ""<HID::Nintendo Wireless Gamepad>/button2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -80,6 +217,9 @@ public partial class @Controller : IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+        m_Player_Start = m_Player.FindAction("Start", throwIfNotFound: true);
+        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+        m_Player_ShootingDirection = m_Player.FindAction("ShootingDirection", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -140,11 +280,17 @@ public partial class @Controller : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Movement;
+    private readonly InputAction m_Player_Start;
+    private readonly InputAction m_Player_Fire;
+    private readonly InputAction m_Player_ShootingDirection;
     public struct PlayerActions
     {
         private @Controller m_Wrapper;
         public PlayerActions(@Controller wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
+        public InputAction @Start => m_Wrapper.m_Player_Start;
+        public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @ShootingDirection => m_Wrapper.m_Player_ShootingDirection;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -157,6 +303,15 @@ public partial class @Controller : IInputActionCollection2, IDisposable
                 @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Start.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStart;
+                @Start.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStart;
+                @Start.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStart;
+                @Fire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
+                @Fire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
+                @Fire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
+                @ShootingDirection.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootingDirection;
+                @ShootingDirection.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootingDirection;
+                @ShootingDirection.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootingDirection;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -164,6 +319,15 @@ public partial class @Controller : IInputActionCollection2, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @Start.started += instance.OnStart;
+                @Start.performed += instance.OnStart;
+                @Start.canceled += instance.OnStart;
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
+                @ShootingDirection.started += instance.OnShootingDirection;
+                @ShootingDirection.performed += instance.OnShootingDirection;
+                @ShootingDirection.canceled += instance.OnShootingDirection;
             }
         }
     }
@@ -180,5 +344,8 @@ public partial class @Controller : IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnStart(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
+        void OnShootingDirection(InputAction.CallbackContext context);
     }
 }

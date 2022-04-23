@@ -6,7 +6,7 @@ public class PlayerReferenceAuthor : MonoBehaviour, IConvertGameObjectToEntity, 
     public PlayerAuthor player;
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-        dstManager.AddComponentData(entity, new PlayerReference(conversionSystem.GetPrimaryEntity(player)));
+        dstManager.AddComponentData(entity, new PlayerPrefabReference(conversionSystem.GetPrimaryEntity(player)));
     }
 
     public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs) {
@@ -14,10 +14,10 @@ public class PlayerReferenceAuthor : MonoBehaviour, IConvertGameObjectToEntity, 
     }
 }
 
-public struct PlayerReference : IComponentData {
+public struct PlayerPrefabReference : IComponentData {
     public Entity Value;
 
-    public PlayerReference(Entity value) {
+    public PlayerPrefabReference(Entity value) {
         Value = value;
     }
 }

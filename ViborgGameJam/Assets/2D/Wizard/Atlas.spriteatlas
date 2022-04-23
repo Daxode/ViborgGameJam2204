@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 6571b33f0554ccd40a8600b55364c714, type: 3}
+    - {fileID: 2800000, guid: fa30147fc473ff748bfa6f122e777b6d, type: 3}
+    - {fileID: 2800000, guid: 8a890aa0fc8edfc4b829cc735498b248, type: 3}
+    - {fileID: 2800000, guid: dc461ead89184034f8717c5aebea6a73, type: 3}
+    - {fileID: 2800000, guid: 0c5016adaeaebca44873e4b2c2147f32, type: 3}
+    - {fileID: 2800000, guid: 940fb85ca61942547abc56a4b25ec545, type: 3}
+    - {fileID: 2800000, guid: 8e22c7a85168866449b3ec9b85bf634b, type: 3}
+    - {fileID: 2800000, guid: b2509493f3039be40bcfb039218ff260, type: 3}
+    - {fileID: 2800000, guid: 60224403e4cca5642a09606ffd6a73de, type: 3}
+    - {fileID: 2800000, guid: aee6578a65ce7cb4b87303a44d187970, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 8a890aa0fc8edfc4b829cc735498b248, type: 3}
+  - {fileID: 21300000, guid: 60224403e4cca5642a09606ffd6a73de, type: 3}
+  - {fileID: 21300000, guid: b2509493f3039be40bcfb039218ff260, type: 3}
+  - {fileID: 21300000, guid: 8e22c7a85168866449b3ec9b85bf634b, type: 3}
+  - {fileID: 21300000, guid: aee6578a65ce7cb4b87303a44d187970, type: 3}
+  - {fileID: 21300000, guid: 940fb85ca61942547abc56a4b25ec545, type: 3}
+  - {fileID: 21300000, guid: 0c5016adaeaebca44873e4b2c2147f32, type: 3}
+  - {fileID: 21300000, guid: dc461ead89184034f8717c5aebea6a73, type: 3}
+  - {fileID: 21300000, guid: 6571b33f0554ccd40a8600b55364c714, type: 3}
+  - {fileID: 21300000, guid: fa30147fc473ff748bfa6f122e777b6d, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - frame3
+  - frame9
+  - frame8
+  - frame7
+  - frame10
+  - frame6
+  - frame5
+  - frame4
+  - frame1
+  - frame2
+  m_RenderDataMap: {}
+  m_Tag: Atlas
+  m_IsVariant: 0
