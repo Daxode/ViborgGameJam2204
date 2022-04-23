@@ -61,7 +61,6 @@ partial class PlayerSystem : SystemBase {
         var deltaTime = Time.DeltaTime;
         Entities.WithAll<PlayerTag>().ForEach((ControllerReference c, ref PhysicsVelocity vel) => {
             var moveDirection = c.Value.Player.Movement.ReadValue<Vector2>();
-            Debug.Log(moveDirection);
             vel.Linear += new float3(moveDirection,0)*deltaTime*20;
         }).WithoutBurst().Run();
         
