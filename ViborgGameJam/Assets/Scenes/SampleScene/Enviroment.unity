@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 1145537310}
   - component: {fileID: 1145537311}
   - component: {fileID: 1145537312}
+  - component: {fileID: 1145537313}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -225,3 +226,20 @@ MonoBehaviour:
   m_EnableSolverStabilizationHeuristic: 0
   m_MultiThreaded: 1
   m_SynchronizeCollisionWorld: 0
+--- !u!114 &1145537313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145537307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ba0de479eb042a0977f2e31de419407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Values:
+  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: 0, g: 1, b: 0, a: 0}
+  - {r: 0, g: 0, b: 1, a: 0}
+  - {r: 1, g: 0, b: 1, a: 0}

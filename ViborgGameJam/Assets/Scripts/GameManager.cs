@@ -1,10 +1,12 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Users;
+using UnityEngine.UIElements;
 
 [AlwaysUpdateSystem]
 public partial class GameManager : SystemBase {
@@ -28,6 +30,15 @@ public partial class GameManager : SystemBase {
             
             var e = EntityManager.CreateEntity(typeof(PuppetTag));
             EntityManager.AddComponentObject(e, new ControllerReference{Value = playerController});
+
+            var uiDocumentEntity = GetSingletonEntity<UIDocument>();
+            var root = EntityManager.GetComponentObject<UIDocument>(uiDocumentEntity).rootVisualElement;
+            var playerColors = GetBuffer<ColorElement>(GetSingletonEntity<ColorElement>());
+            var playerThingAsset = EntityManager.GetComponentObject<PlayerThingUXMLReference>(GetSingletonEntity<PlayerThingUXMLReference>()).Value;
+            var playerThing = playerThingAsset.Instantiate();
+            playerThing.Q("Background").style.backgroundColor = playerColors[4-InputUser.listenForUnpairedDeviceActivity].Color;
+            root.Q("Players").Add(playerThing);
+            
             InputUser.listenForUnpairedDeviceActivity--;
         };
     }
@@ -43,12 +54,7 @@ partial class PlayerSystem : SystemBase {
     protected override void OnStartRunning() {
         var playerPrefab = GetSingleton<PlayerPrefabReference>().Value;
         var playerModelPrefab = this.GetSingleton<PlayerModelPrefabReference>().Value;
-        Color[] playerColors = new Color[4]; //defining our 4 player colors
-            playerColors[0] = new Color(1,0,0,1);
-            playerColors[1] = new Color(0,1,0,1);
-            playerColors[2] = new Color(0,0,1,1);
-            playerColors[3] = new Color(1,1,0,1);
-        Entities.WithAll<PuppetTag>().ForEach((int entityInQueryIndex, ControllerReference c) => {
+        Entities.WithAll<PuppetTag>().ForEach((ControllerReference c) => {
             Debug.Log($"Controller Registered: {c.Value.devices.Value[0].displayName}");
             var player = EntityManager.Instantiate(playerPrefab);
 
@@ -60,14 +66,17 @@ partial class PlayerSystem : SystemBase {
 
             // Setup Player
             EntityManager.AddComponentObject(player, instance.GetComponent<Animator>());
+            EntityManager.AddComponentObject(player, instance.GetComponent<SpriteRenderer>());
             EntityManager.AddComponentObject(player, c);
             var playerMass = EntityManager.GetComponentData<PhysicsMass>(player);
             playerMass.InverseInertia = 0;
             EntityManager.SetComponentData(player, playerMass);
-
-            SpriteRenderer playerSpriteRenderer = instance.GetComponent<SpriteRenderer>();
-            playerSpriteRenderer.color = playerColors[entityInQueryIndex];
         }).WithStructuralChanges().Run();
+
+        var playerColors = GetBuffer<ColorElement>(GetSingletonEntity<ColorElement>());
+        Entities.WithAll<PlayerTag>().ForEach((int entityInQueryIndex, SpriteRenderer renderer) => {
+            renderer.color = playerColors[entityInQueryIndex];
+        }).WithoutBurst().Run();
     }
 
     protected override void OnUpdate() {
