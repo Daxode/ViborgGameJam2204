@@ -25,7 +25,7 @@ public partial class GameManager : SystemBase {
         _global = new Controller();
         _global.Enable();
         _global.Player.Start.started += context => {
-            if (!HasSingleton<GameStartedTag>())
+            if (!HasSingleton<GamePreloadTag>() && InputUser.listenForUnpairedDeviceActivity < 3)
                 EntityManager.CreateEntity(typeof(GamePreloadTag));
         };
 
