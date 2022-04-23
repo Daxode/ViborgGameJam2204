@@ -8,7 +8,6 @@ using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.UIElements;
 
-[AlwaysUpdateSystem]
 public partial class GameManager : SystemBase {
     private Controller _global;
 
