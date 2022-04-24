@@ -12,7 +12,14 @@ public class PlayerAuthor : MonoBehaviour, IConvertGameObjectToEntity {
         dstManager.AddComponentData(entity, new HealthCooldown{Interval = HealthInterval});
         dstManager.AddComponentData(entity, new TargetEntity());
         dstManager.AddComponentData(entity, new PlayerTargetIndex());
+        dstManager.AddComponentData(entity, new Hands());
     }
+}
+
+
+public struct Hands : IComponentData {
+    public Entity HeldEntity;
+    public PickUpType Type;
 }
 
 public struct PlayerTargetIndex : IComponentData {

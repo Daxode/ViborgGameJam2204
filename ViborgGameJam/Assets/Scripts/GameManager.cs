@@ -84,10 +84,6 @@ partial class PreStartSystem : SystemBase {
             (numbers[swapNumbers.y], numbers[swapNumbers.x]) = (numbers[swapNumbers.x], numbers[swapNumbers.y]);
         }
 
-        foreach (var num in numbers) {
-            Debug.Log(num);
-        }
-
         Entities.WithStoreEntityQueryInField(ref puppetControllerQuery).WithAll<PuppetTag, ControllerReference>().ForEach((Entity e, int entityInQueryIndex, PlayerThingReference playerThing) => {
             var number = numbers[entityInQueryIndex];
             EntityManager.AddComponentData(e, new PlayerTargetIndex{Value = number});
@@ -124,6 +120,7 @@ partial class PlayerSystem : SystemBase {
             EntityManager.AddComponentData(playerModel, new CopyTransformToGameObject());
 
             // Setup Player
+            EntityManager.AddComponentObject(player, instance.GetComponentInChildren<PowerUpIndicatorRendererReference>());
             EntityManager.AddComponentObject(player, instance.GetComponent<Animator>());
             EntityManager.AddComponentObject(player, instance.GetComponent<SpriteRenderer>());
             EntityManager.AddComponentObject(player, c);
@@ -202,4 +199,5 @@ class ControllerReference : IComponentData {
 }
 
 struct PuppetTag : IComponentData {}
-struct PlayerTag : IComponentData {}
+
+public struct PlayerTag : IComponentData {}
