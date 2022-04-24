@@ -16,9 +16,11 @@ public partial class GameManager : SystemBase {
     private Controller _global;
 
     private EntityQuery colorQuery;
+    private EntityQuery winQuery;
     protected override void OnCreate() {
         colorQuery = GetEntityQuery(typeof(ColorElement));
         RequireForUpdate(colorQuery);
+        winQuery = GetEntityQuery(typeof(WinScreenModelReference));
     }
 
     protected override void OnStartRunning() {
@@ -28,6 +30,12 @@ public partial class GameManager : SystemBase {
             if (!HasSingleton<GamePreloadTag>() && InputUser.listenForUnpairedDeviceActivity < 3)
                 EntityManager.CreateEntity(typeof(GamePreloadTag));
         };
+
+        var winScreenEntity = winQuery.GetSingletonEntity();
+        var modelToSpawn = EntityManager.GetComponentObject<WinScreenModelReference>(winScreenEntity).winScreen;
+        var instanceOfWinModel = Object.Instantiate(modelToSpawn);
+        instanceOfWinModel.SetActive(false);
+        EntityManager.AddComponentObject(winScreenEntity, instanceOfWinModel);
 
         InputUser.listenForUnpairedDeviceActivity = 4;
         InputUser.onUnpairedDeviceUsed += (control, ptr) => {
@@ -108,7 +116,7 @@ partial class PlayerSystem : SystemBase {
     protected override void OnStartRunning() {
         var playerPrefab = GetSingleton<PlayerPrefabReference>().Value;
         var playerModelPrefab = this.GetSingleton<PlayerModelPrefabReference>().Value;
-        Entities.WithAll<PuppetTag>().ForEach((ControllerReference c, in PlayerTargetIndex index) => {
+        Entities.WithAll<PuppetTag>().ForEach((int entityInQueryIndex, ControllerReference c, in PlayerTargetIndex index) => {
             Debug.Log($"Controller Registered: {c.Value.devices.Value[0].displayName}");
             var player = EntityManager.Instantiate(playerPrefab);
 
@@ -125,6 +133,8 @@ partial class PlayerSystem : SystemBase {
             EntityManager.AddComponentObject(player, instance.GetComponent<SpriteRenderer>());
             EntityManager.AddComponentObject(player, c);
             EntityManager.AddComponentData(player, index);
+            EntityManager.AddComponentData(player, new PlayerIndex { Value = entityInQueryIndex });
+
             var h = GetComponent<HealthCooldown>(player);
             h.TimeLeft = h.Interval;
             EntityManager.SetComponentData(player, h);

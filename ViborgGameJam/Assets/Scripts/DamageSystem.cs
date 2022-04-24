@@ -87,15 +87,20 @@ public partial class DamageSystem : SystemBase {
                 }
                 EntityManager.DestroyEntity(kvp.Key);
                 
+                // If not enough players then win
                 var playersLeft = _playerQuery.CalculateEntityCount();
-                switch (playersLeft) {
-                    case 1: 
-                        Debug.Log($"Victory to: {GetSingletonEntity<PlayerTag>()}");
-                        break;
-                    case 0: 
-                        Debug.Log("Tie");
-                        break;
-                }
+                if (playersLeft >= 2) continue;
+                var winScreenEntity = GetSingletonEntity<WinScreenModelReference>();
+                var winScreen = EntityManager.GetComponentObject<GameObject>(winScreenEntity);
+                winScreen.SetActive(true);
+
+                if (playersLeft == 0) continue;
+                // Set Winner Color
+                var winnerEntity = GetSingletonEntity<PlayerTag>();
+                var winnerIndex = GetComponent<PlayerIndex>(winnerEntity).Value;
+                var changeColorOf = winScreen.GetComponent<WinScreenReferences>().hatToChangeColorOf;
+                var color = GetBuffer<ColorElement>(GetSingletonEntity<ColorElement>())[winnerIndex].Color;
+                changeColorOf.color = color;
             }
         }
 
