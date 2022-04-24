@@ -70,25 +70,33 @@ partial class PreStartSystem : SystemBase {
     }
 
     protected override void OnStartRunning() {
-        var timeTicks = (uint)DateTime.Now.Ticks;
-        var hashSet = new NativeHashSet<int>(4, Allocator.Temp);
         var playersConnected = puppetControllerQuery.CalculateEntityCount();
-        Entities.WithStoreEntityQueryInField(ref puppetControllerQuery).WithAll<PuppetTag, ControllerReference>().ForEach((Entity e, int entityInQueryIndex, PlayerThingReference playerThing) => {
-            var rnd = Random.CreateFromIndex((uint)entityInQueryIndex + timeTicks);
-            var number = rnd.NextInt(playersConnected);
-            while (hashSet.Contains(number)||entityInQueryIndex==number) {
-                number = rnd.NextInt(playersConnected);
-            }
 
-            hashSet.Add(number);
+        var rnd = new Random((uint)DateTime.Now.Ticks);
+        var numbers = new NativeArray<int>(playersConnected, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+        for (int i = 0; i < numbers.Length; i++) {
+            numbers[i] = i;
+        }
+        for (int i = 0; i < 10; i++) {
+            var swapNumbers = rnd.NextInt2(playersConnected);
+            if (swapNumbers.x == swapNumbers.y) continue;
+            if (numbers[swapNumbers.x] == swapNumbers.y || numbers[swapNumbers.y] == swapNumbers.x) continue;
+            (numbers[swapNumbers.y], numbers[swapNumbers.x]) = (numbers[swapNumbers.x], numbers[swapNumbers.y]);
+        }
+
+        foreach (var num in numbers) {
+            Debug.Log(num);
+        }
+
+        Entities.WithStoreEntityQueryInField(ref puppetControllerQuery).WithAll<PuppetTag, ControllerReference>().ForEach((Entity e, int entityInQueryIndex, PlayerThingReference playerThing) => {
+            var number = numbers[entityInQueryIndex];
             EntityManager.AddComponentData(e, new PlayerTargetIndex{Value = number});
-            
             var playerColors = GetBuffer<ColorElement>(colorQuery.GetSingletonEntity());
             playerThing.Element.Q("Skull").style.unityBackgroundImageTintColor = playerColors[number].Color;
         }).WithStructuralChanges().Run();
 
         EntityManager.CreateEntity(typeof(GameStartedTag));
-        hashSet.Dispose();
+        numbers.Dispose();
     }
 
     protected override void OnUpdate() {}
