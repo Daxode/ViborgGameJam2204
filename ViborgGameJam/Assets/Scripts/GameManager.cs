@@ -186,7 +186,7 @@ partial class PlayerSystem : SystemBase {
             EntityManager.SetComponentData(bullet, translation);
             EntityManager.SetComponentData(bullet, new PhysicsVelocity{Linear = new float3(direction,0)*10});
             EntityManager.AddComponentData(bullet, new BulletOrigin { Value = e });
-                    
+            
             EntityManager.SetName(bulletModel, "BulletModel");
             EntityManager.AddComponentData(bulletModel,  new GameObjectStateComponent{GameObject = instance.transform.gameObject});
             EntityManager.AddComponentObject(bulletModel, instance.transform);

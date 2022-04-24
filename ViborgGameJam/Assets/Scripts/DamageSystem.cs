@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using System;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -36,19 +37,51 @@ public partial class DamageSystem : SystemBase {
         CompleteDependency();
         var healthSprites = EntityManager.GetComponentObject<HealthSprites>(_healthSpritesQuery.GetSingletonEntity()).Values;
         foreach (var kvp in entityToDepleteHealth) {
-            var timer = GetComponent<HealthCooldown>(kvp.Key);
-            if (timer.TimeLeft>0) continue;
+            var shouldTakeHealth = false;
+            if (HasComponent<Hands>(kvp.Value)) {
+                var throwingHand = GetComponent<Hands>(kvp.Value);
+                if (throwingHand.Type == PickUpType.Empty) {
+                    shouldTakeHealth = true;
+                } else {
+                    var powerUpIndicator = EntityManager.GetComponentObject<PowerUpIndicatorRendererReference>(kvp.Value);
+                    powerUpIndicator.Renderer.color = new Color(0, 0, 0, 0);
+                    EntityManager.DestroyEntity(throwingHand.HeldEntity);
+                    SetComponent(kvp.Value, new Hands());
+
+                    if (EntityManager.HasComponent<SpriteRenderer>(kvp.Key)) {
+                        switch (throwingHand.Type) {
+                            case PickUpType.Desaturate: 
+                                var spriteHit = EntityManager.GetComponentObject<SpriteRenderer>(kvp.Key);
+                                spriteHit.color = Color.gray;
+                                break;
+                            case PickUpType.ColorChange:
+                                var spriteA = EntityManager.GetComponentObject<SpriteRenderer>(kvp.Value);
+                                var spriteB = EntityManager.GetComponentObject<SpriteRenderer>(kvp.Key);
+                                (spriteB.color, spriteA.color) = (spriteA.color, spriteB.color);
+                                break;
+                            case PickUpType.Animal: break;
+                            default: throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                }
+            } else {
+                shouldTakeHealth = true;
+            } 
             
-            var h = GetComponent<Health>(kvp.Key);
-            h.Left--;
-            SetComponent(kvp.Key, h);
-            timer.TimeLeft = timer.Interval;
-            SetComponent(kvp.Key, timer);
+            if (HasComponent<HealthCooldown>(kvp.Key) && shouldTakeHealth) {
+                var timer = GetComponent<HealthCooldown>(kvp.Key);
+                if (timer.TimeLeft > 0) continue;
+                
+                var h = GetComponent<Health>(kvp.Key);
+                h.Left--;
+                SetComponent(kvp.Key, h);
+                timer.TimeLeft = timer.Interval;
+                SetComponent(kvp.Key, timer);
 
-            var renderer = EntityManager.GetComponentObject<SpriteRenderer>(kvp.Key).GetComponent<HealthbarReference>().r;
-            renderer.sprite = healthSprites[h.Left];
+                var renderer = EntityManager.GetComponentObject<SpriteRenderer>(kvp.Key).GetComponent<HealthbarReference>().r;
+                renderer.sprite = healthSprites[h.Left];
 
-            if (h.Left <= 0) {
+                if (h.Left > 0) continue;
                 if (GetComponent<TargetEntity>(kvp.Value).target != kvp.Key) {
                     EntityManager.DestroyEntity(kvp.Value);
                 }
@@ -92,6 +125,7 @@ public struct BulletTriggerJob : ITriggerEventsJob {
     [ReadOnly] public ComponentDataFromEntity<BulletDamage> bullets;
     [ReadOnly] public ComponentDataFromEntity<BulletOrigin> bulletOrigin;
     [ReadOnly] public ComponentDataFromEntity<Health> healths;
+
     public EntityCommandBuffer ecb;
     public NativeHashMap<Entity, Entity> entityToDepleteHealth;
 
@@ -104,11 +138,7 @@ public struct BulletTriggerJob : ITriggerEventsJob {
         if (!bullets.HasComponent(bulletEntity)) return;
         var origin = bulletOrigin[bulletEntity].Value;
         if (origin == healthEntity || bullets.HasComponent(healthEntity)) return;
-
-        if (healths.HasComponent(healthEntity)) {
-            entityToDepleteHealth[healthEntity]=origin;
-        }
-
+        entityToDepleteHealth[healthEntity]=origin;
         ecb.DestroyEntity(bulletEntity);
     }
 }
