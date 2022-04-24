@@ -50,6 +50,9 @@ public partial class GameManager : SystemBase {
             EntityManager.AddComponentObject(e, new ControllerReference{Value = playerController});
             
             var root = EntityManager.GetComponentObject<UIDocument>(GetSingletonEntity<UIDocument>()).rootVisualElement;
+            var front = root.Q("Front");
+            front.style.backgroundImage = new StyleBackground(this.GetSingleton<FrontImages>()._sprites[4-InputUser.listenForUnpairedDeviceActivity]);
+            
             var playerColors = GetBuffer<ColorElement>(colorQuery.GetSingletonEntity());
             var playerThingAsset = EntityManager.GetComponentObject<PlayerThingUXMLReference>(GetSingletonEntity<PlayerThingUXMLReference>()).Value;
             var playerThing = playerThingAsset.Instantiate();
@@ -113,7 +116,14 @@ partial class PlayerSystem : SystemBase {
         _playerQuery = GetEntityQuery(typeof(PlayerTag));
     }
 
+    private VisualElement root;
+    private Label _label;
     protected override void OnStartRunning() {
+        root = EntityManager.GetComponentObject<UIDocument>(GetSingletonEntity<UIDocument>()).rootVisualElement;
+        var front = root.Q("Front");
+        front.style.backgroundImage = null;
+        _label = root.Q<Label>();
+
         var playerPrefab = GetSingleton<PlayerPrefabReference>().Value;
         var playerModelPrefab = this.GetSingleton<PlayerModelPrefabReference>().Value;
         Entities.WithAll<PuppetTag>().ForEach((int entityInQueryIndex, ControllerReference c, in PlayerTargetIndex index) => {
