@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -172,8 +174,44 @@ partial class PlayerSystem : SystemBase {
         playerEntities.Dispose();
     }
 
+    private float timer = 120;
     protected override void OnUpdate() {
         var deltaTime = Time.DeltaTime;
+
+        if (timer < 0) {
+            // If not enough players then win
+            var playersLeft = _playerQuery.CalculateEntityCount(); ;
+            var winScreenEntity = GetSingletonEntity<WinScreenModelReference>();
+            var winScreen = EntityManager.GetComponentObject<GameObject>(winScreenEntity);
+            winScreen.SetActive(true);
+
+            var indices = GetEntityQuery(typeof(PlayerIndex)).ToComponentDataArray<PlayerIndex>(Allocator.TempJob);
+            var playerWon = new FixedList128Bytes<int>();
+            Entities.WithAll<PlayerTag>().ForEach((in PlayerIndex index, in PlayerTargetIndex targetIndex) => {
+                if (!indices.Select(i=>i.Value).Contains(targetIndex.Value)) 
+                    playerWon.Add(index.Value);
+            }).WithoutBurst().Run();
+            indices.Dispose();
+
+            if (playerWon.Length == 1) {
+                // Set Winner Color;
+                var winnerIndex = playerWon[0];
+                var changeColorOf = winScreen.GetComponent<WinScreenReferences>().hatToChangeColorOf;
+                var color = GetBuffer<ColorElement>(GetSingletonEntity<ColorElement>())[winnerIndex].Color;
+                changeColorOf.color = color;
+            } else if (playersLeft == 1) {
+                // Set Winner Color
+                var winnerEntity = GetSingletonEntity<PlayerTag>();
+                var winnerIndex = GetComponent<PlayerIndex>(winnerEntity).Value;
+                var changeColorOf = winScreen.GetComponent<WinScreenReferences>().hatToChangeColorOf;
+                var color = GetBuffer<ColorElement>(GetSingletonEntity<ColorElement>())[winnerIndex].Color;
+                changeColorOf.color = color;
+            }
+        } else {
+            timer -= deltaTime;
+            _label.text = $"{math.round(timer)}";
+        }
+
         Entities.WithAll<PlayerTag>().ForEach((ControllerReference c, ref PhysicsVelocity vel) => {
             var moveDirection = c.Value.Player.Movement.ReadValue<Vector2>();
             vel.Linear += new float3(moveDirection,0)*deltaTime*20;
